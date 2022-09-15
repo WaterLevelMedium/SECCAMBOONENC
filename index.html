@@ -1,193 +1,64 @@
-<!doctype=html>
+<<!DOCTYPE html>
 <html>
-<meta charset=utf-8 />
-<title id="title">ShopeCreekQuickReference</title>
-<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+<head>
+	<meta charset=utf-8 />
+	<title id="title">ShopeCreekQuickReference</title>
+	<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.css" />
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.1/dist/leaflet.css" />
-<link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css?family=Lora" rel="stylesheet">
-<link src='data\route.js'>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.css" />
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.1/dist/leaflet.css" />
+	<link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Lora" rel="stylesheet">
+  <script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
+  integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ=="
+  crossorigin=""/>
+  <!-- Make sure you put this AFTER Leaflet's CSS -->
+  <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"
+    integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
+    crossorigin=""></script>
 <!-- Nice background-color from sonny rollins website : #3c3b4a -->
-<style>
+	<style>
 
 
-html {
-  box-sizing: border-box;
-}
-  body {
-    margin: 0;
-    padding: 0;
-    background: #3c3b4a;
-    font-family: "Noto Sans", sans-serif;
-    color: #3d3d3d;
-  }
+	html {
+		box-sizing: border-box;
+	}
+		body {
+			margin: 0;
+			padding: 0;
+			background: #3c3b4a;
+			font-family: "Noto Sans", sans-serif;
+			color: #3d3d3d;
+		}
 
+		#map {
+			position: absolute;
+			top: 0;
+			bottom: 0;
+			width: 100%;
+      height: 100%;
+		}
 
-
-  h2 {
-    font-family: cursive;
-    letter-spacing: .04em;
-    margin-top: 8px;
-    margin-left: 4px
-  }
-
-  #map {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 100%;
-  }
-
-  #txtDiv {
-
-    height: 20%;
-    overflow: auto;
-    position: absolute;
-    bottom: 0;
-    width: 80%;
-    margin: 20px;
-    padding: 15px;
-    background-color: #fefef2;
-    border: 1px solid black;
-    border-radius: 3px;
-    z-index: 700;
-  }
-  li {
-    font-size: .93em;
-    line-height: 1.5em;
-    font-weight: lighter;
-  }
-
-  button {
-    text-shadow: 10px black;
-    font-family: inherit;
-    font-size: 10px;
-  }
-  #txtButton {
-    float: right;
-    margin: 5px;
-    height: auto;
-  }
-  #txtButton2 {
-    font-size: 11px;
-    position: absolute;
-    display: inline-flex;
-    padding: 2px;
-    margin: 15px;
-    right: 8px;
-    z-index: 800;
-  }
-  h3 {
-
-    margin: 2px;
-    font-family: cursive;
-    font-size: 16px;
-    font-weight: 800;
-  }
-  #boxtitle {
-    text-align: center;
-  }
-  #pageTitle {
-    position: absolute;
-    left: 60px;
-    font-size: 20px;
-    font-family: "Noto Sans", serif;
-    letter-spacing: .03em;
-    padding: 9px;
-    background: #fefef2;
-    border: 1px solid grey;
-    border-radius: 5px;
-    z-index: 800;
-    align-content: space-around;
-  }
-  a {
-    font-size: 12px;
-    color: #0e86d4;
-    letter-spacing: .02px;
-    padding: 2px;
-  }
-  #citations_Lower {
-    margin-top: 10px;
-    font-size: 10.6px;
-    line-height: .6em;
-    float: right;
-    padding: 3px;
-    font-style: oblique;
-  }
-
-</style>
+	</style>
 </head>
 
 <body>
 
-<div id='map'></div>
+	<div id='map'></div>
 
 
-<!--start upper page features -->
-
-    <h1 id='pageTitle'>	Shope Creek	Trail System</h1>
-
-    <button id="txtButton2" onClick="hideTxt()">Show/Hide Text</button>
-
-
-<!-- end upper features -->
-
-<!-- start of lower text body -->
-
-    <div id='txtDiv'>
-
-      <h2 id='boxtitle'>More information </h2>
-      <h3>Shope Creek Trail System</h3
-      <br/>
-      <ul>
-      <li> Located East of Asheville, North Carolina, Shope Creek is a hiking/recreation area with an array of scenic waterfalls, mountain biking trails, native plant species, and overlooks.  </li>
-      <br>
-      <li> Although the trail system has seen greater use upon completion of the parking area, prior to 2012 no formal access to the property was avalible to the public.
-      <br/>
-      <li> The loop portrayed is the longest MTB trail in this system, and features a number of steep climbs/downhill,
-      as well as log rides, tabletops, and jumps built courtesy of local enthusiasts.</li></li>
-      <br/>
-      <li> Overnight camping and motorized vehicles are prohibitied. Hunting is allowed while in-season. Hikers/MTBs use caution. </li>
-      </ul>
-      <!-- sources below  tileLayer  polyline segments -->
-
-      <div id="citations_Lower">
-      <p>Map author: River Pyle <a href="https://leaflet-extras.github.io/leaflet-providers/preview/#filter=USGS.USImageryTopo">USGS Tile Layer - Leaflet</a> </p>
-      <p><a href="https://www.hikewnc.info/trailheads/shope-creek/"> More info at HikeWNC.org </a>,<a href='https://www.mtbikewnc.com/trails/pisgah-national-forest/shope-creek-forest-road'>mtbikewnc.com</a></p>
-      </div>
-
-      </u1>
-    </div>
-
-
-<!-- end lower text body  -->
-
-
-<!-- source import -->
-
-<script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
-<script src="https://unpkg.com/leaflet@1.0.1/dist/leaflet.js"></script>
-<script src="data/mergedShope.js"></script>
-
-<!-- end src -->
-
-<!-- Credits to Vladimir Agafonkin for Leaflet interactive map package, Slava Ukraini! -->
 <script>
 
 //center viewport add zoom para
 var options = {
 //center edited to align with trail system
-center: [35.656940, -82.432374],
-zoom: 14.6
+	center: [36.214909, -81.678954],
+	zoom: 14.9
 };
 
-//output data
-console.log(data);
-
 //creation of the Leaflet map
-  var map = L.map('map', options);
+		var map = L.map('map', options);
 
 //request to load basemap
 
@@ -197,137 +68,38 @@ console.log(data);
 ALTERNATE_TOPOBASEMAP
 ESRI World Topographic
 var Esri_WorldTopoMap = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
-attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), and the GIS User Community'
+	attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), and the GIS User Community'
 });
 */
-
 var USGS_USImageryTopo = L.tileLayer('https://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryTopo/MapServer/tile/{z}/{y}/{x}', {
-maxZoom: 20,
-attribution: 'Tiles courtesy of the <a href="https://usgs.gov/">U.S. Geological Survey</a>'
+	maxZoom: 20,
+	attribution: 'Tiles courtesy of the <a href="https://usgs.gov/">U.S. Geological Survey</a>'
 }).addTo(map);
 
-/*
-string content to be inserted into a tooltip
-  var message = 'Beacon Heights!';
-
-create a Leaflet marker, centered on the map's center.
-L.marker(map.getCenter())
-    .bindTooltip(message) //bind the tooltip and message to the marker
-    .addTo(map) // add the marker to the map`
-    .openTooltip(); // open the tooltip
-*/
-
-//Start map features -- LineString -- markers -- tooltip
-
-var myRoute = L.geoJson(data, {
-filter : function(feature) {
-    if(feature.geometry.type =="LineString") {
-        return feature;
-      }
-    },
-style : function(feature) {
-    return {
-      color: "blue",
-      weight: 3,
-      opacity: .7,
-      dashArray: "5, 4"
-    }
-  }
-  }).addTo(map);
-
-// map.fitBounds(myRoute.getBounds());
-// ^ with this the text blocks out part of the trail, use troubleshot centerpoint
-
-//start landmarks - 4 placemarkers beg & end , 2 middle
-
-// 35.654591, -82.440579 = Parking area
-
-var parkArea = L.marker([35.654591, -82.440579] , markerOptions).addTo(map)
-      .bindTooltip('<b>Shope Creek Parking Area</b><br><br>Start of Trail System.')
-
-var markerOptions = {
-title: 'Parking Area' ,
-clickable: true,
-draggable: false,
-
-};
-
-
-
-
-jumplineStart.bindTooltip(JLS_Infotxt);
-
-
-// misleading loop 35.656555, -82.438555
-
-var ML_Options = {
-color: "#fefef2",
-opacity: .8,
-fillColor: '#0096FF',
-radius: 50,
-fillOpacity: .7,
-};
-
-var misleadingLoop = L.circle([35.658705, -82.435680], ML_Options).addTo(map);
-
-var ML_Infotxt = '<b>Start of inner loop</b> <br/><br/> This trail follows the historic logging tracks within<br/> a small, self-contained valley. Used primarily for hiking,<br/> this loop includes a small waterfalls and native plant species. ';
-
-misleadingLoop.bindTooltip(ML_Infotxt);
-
-
-var markersConsole = L.geoJson(data, {
-filter : function(feature) {
-  if(feature.geometry.type == 'Point') {
-    return feature;
-}
-},
-onEachFeature : function(feature, layer) {
-  console.log(feature.properties)
-}
-}).addTo(map);
-
-
-
-
-//end map features
-
-//toggle map function
-function hideMap() {
-var x = document.getElementById('map');
-if(x.style.display == "none") {
-  x.style.display = "block" ;
-} else {
-  x.style.display = 'none';
-}
+//#0096FF is red
+//#ff3300 is blue
+var circ_options = {
+	color: "#ff3300",
+	opacity: .8,
+	fillColor: '#ff3300',
+	radius: 10,
+	fillOpacity: .9,
 }
 
-//toggle text
-function hideTxt() {
-var x = document.getElementById('txtDiv');
+//camera point features variables
+var townHallCam1 = L.circle([36.217891, -81.682866], circ_options).addTo(map)
 
-if(x.style.display == "none") {
-  x.style.display = "block" ;
-} else {
-  x.style.display = 'none';
-}
+var hopeCenterCam1 = L.circle([36.218263, -81.685100] , circ_options).addTo(map)
 
-}
+// tooltips and information on each camera
 
-function showB () {
+townHallCam1.bindPopup("<b>Cameras on Town Hall </b> </br> There's like three different cameras </br> aimed at the street, the sidewalk, </br> and the stop light on the awning of the Hall.")
 
-var status = document.getElementById('txtDiv');
+hopeCenterCam1.bindTooltip('<b>The Hope Center</b> </br> This is the town "Pregnancy Services" clinic. They monitor </br> entry and exit from one camera on the street mounted </br> on the door.').addTo(map)
 
-var vS = document.getElementById('txtButton');
-if( status.style.display == 'none') {
-  vS.style.display = 'block'
-} else {
-  vS.style.display = 'none';
-}
-}
-//end toggle functions
+
 
 </script>
-
 
 </body>
 
