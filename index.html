@@ -71,9 +71,15 @@ var Esri_WorldTopoMap = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest
 	attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), and the GIS User Community'
 });
 */
+/*
 var USGS_USImageryTopo = L.tileLayer('https://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryTopo/MapServer/tile/{z}/{y}/{x}', {
 	maxZoom: 20,
 	attribution: 'Tiles courtesy of the <a href="https://usgs.gov/">U.S. Geological Survey</a>'
+}).addTo(map);
+*/
+// Esri Basemap has more zoom
+var Esri_WorldImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+	attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
 }).addTo(map);
 
 //#0096FF is red
@@ -91,12 +97,16 @@ var townHallCam1 = L.circle([36.217891, -81.682866], circ_options).addTo(map)
 
 var hopeCenterCam1 = L.circle([36.218263, -81.685100] , circ_options).addTo(map)
 
+var libraryEagle = L.circle([36.215189, -81.679876],circ_options).addTo(map)
+
+
 // tooltips and information on each camera
 
 townHallCam1.bindTooltip("<b>Cameras on Town Hall </b> </br> There's like three different cameras </br> aimed at the street, the sidewalk, </br> and the stop light on the awning of the Hall.").addTo(map)
 
 hopeCenterCam1.bindTooltip('<b>The Hope Center</b> </br> This is the town "Pregnancy Services" clinic. </br> They monitor entry and exit from one </br> camera on the street mounted </br> on the door.').addTo(map)
 
+libraryEagle.bindTooltip('<b> App State Library </b> </br> This camera resides above the coffee shop for the library. </br> Not sure which way it points... No access.').addTo(map)
 
 
 </script>
