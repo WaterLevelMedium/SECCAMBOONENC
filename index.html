@@ -57,12 +57,29 @@ var options = {
 	zoom: 14.9
 };
 
+function getCoor(e) {
+	// working popup on mouse location
+	var coord = e.latlng.toString().replace('( ','').replace(')','');
+
+	var popup = L.popup()
+        .setLatLng(e.latlng)
+        .setContent(coord)
+        .openOn(map);
+
+
+
+	popup.setLatLng(e.latlng).openOn(map);
+
+
+
+
+}
 //creation of the Leaflet map
-		var map = L.map('map', options);
+var map = L.map('map', options);
 
 //request to load basemap
 
-
+map.on('click', getCoor);
 
 /*
 ALTERNATE_TOPOBASEMAP
