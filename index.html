@@ -58,7 +58,25 @@ var options = {
 };
 
 //creation of the Leaflet map
-		var map = L.map('map', options);
+	var map = L.map('map', options);
+
+  // prompt for adding secutity cameras
+  var coordinates = L.popup();
+  function addPoint(p){
+        var latlng = string(p);
+  }
+  function onMapClick(e){
+    coordinates
+          .setLatLng(e.latlng)
+          .setContent(e.latlng.toString().replace('LatLng(' , '').replace(')','') + '</br></br>Add point feature? </br></br> <button onClick="addPoint()">Yes</button> &nbsp <button onClick="map.closePopup()">No</br>')
+          .openOn(map);
+
+  };
+  map.on('click', onMapClick);
+
+
+
+
 
 //request to load basemap
 
@@ -97,8 +115,7 @@ var townHallCam1 = L.circle([36.217891, -81.682866], circ_options).addTo(map)
 
 var hopeCenterCam1 = L.circle([36.218263, -81.685100] , circ_options).addTo(map)
 
-var libraryEagle = L.circle([36.215189, -81.679876],circ_options).addTo(map)
-
+var libraryEagle = L.circle([36.215189, -81.679876], circ_options).addTo(map)
 
 // tooltips and information on each camera
 
