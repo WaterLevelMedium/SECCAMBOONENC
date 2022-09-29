@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta charset=utf-8 />
-	<title id="title">ShopeCreekQuickReference</title>
+	<title id="title">Security Cameras in Boone </title>
 	<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
 
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.css" />
@@ -54,27 +54,47 @@
 var options = {
 //center edited to align with trail system
 	center: [36.214909, -81.678954],
-	zoom: 14.9
+	zoom: 14.9,
+	closePopupOnClick: true,
 };
+var circ_options = {
+	color: "#ff3300",
+	opacity: .8,
+	fillColor: '#ff3300',
+	radius: 10,
+	fillOpacity: .9,
+}
 
 //creation of the Leaflet map
 	var map = L.map('map', options);
 
   // prompt for adding secutity cameras
   var coordinates = L.popup();
-  function addPoint(p){
-        var latlng = string(p);
-  }
+	var output = L.popup();
+
+	// start Out put
+	function addCircle(e) {
+		console.log(e.latlng.lat + ',' + e.latlng.lng);
+		L.circle([e.latlng.lat,e.latlng.lng],circ_options)
+			.addTo(map)
+			.bindPopup(e.NAME);
+
+			// need to add all of these to a list and append it on each click
+			// addCircle works up i cant extend the e event to within the popup content
+
+	};
+
   function onMapClick(e){
+		var coords = e.
     coordinates
           .setLatLng(e.latlng)
-          .setContent(e.latlng.toString().replace('LatLng(' , '').replace(')','') + '</br></br>Add point feature? </br></br> <button onClick="addPoint()">Yes</button> &nbsp <button onClick="map.closePopup()">No</br>')
+          .setContent(e.latlng.toString().replace('LatLng(' , '').replace(')','') + '</br></br>Add point feature? </br></br> <button id="yes" onClick="addCircle()">Yes</button> &nbsp <button onClick="map.closePopup()">No</button></br></br><textarea id="name">  </textarea>')
           .openOn(map);
 
   };
-  map.on('click', onMapClick);
+  //map.on('click', onMapClick);
 
-
+	map.on('click' , addCircle);
 
 
 
@@ -102,13 +122,7 @@ var Esri_WorldImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest
 
 //#0096FF is red
 //#ff3300 is blue
-var circ_options = {
-	color: "#ff3300",
-	opacity: .8,
-	fillColor: '#ff3300',
-	radius: 10,
-	fillOpacity: .9,
-}
+
 
 //camera point features variables
 var townHallCam1 = L.circle([36.217891, -81.682866], circ_options).addTo(map)
