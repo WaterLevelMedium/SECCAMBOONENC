@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta charset=utf-8 />
-	<title id="title">ShopeCreekQuickReference</title>
+	<title id="title">Security Cameras in Boone </title>
 	<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
 
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.css" />
@@ -54,32 +54,97 @@
 var options = {
 //center edited to align with trail system
 	center: [36.214909, -81.678954],
-	zoom: 14.9
+	zoom: 14.9,
+	closePopupOnClick: true,
 };
 
-function getCoor(e) {
-	// working popup on mouse location
-	var coord = e.latlng.toString().replace('( ','').replace(')','');
+// red circle denotes visible Security camera in public space
+var circ_options = {
+	color: "#ff3300",
+	opacity: .8,
+	fillColor: '#ff3300',
+	radius: 10,
+	fillOpacity: .9,
+};
 
+var map = L.map('map', options);
+
+// Esri Basemap has more zoom
+var Esri_WorldImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+	attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+}).addTo(map);
+
+// END TILE SETUP
+
+
+// START UI
+
+// adds circle on map but cant figure out how to append
+function addCircle(coords) {
+	console.log('working... heres the event obj' , coords)
+	console.log(coords);
+	L.circle([e.latlng.lat,e.latlng.lng],circ_options)
+		.addTo(map)
+		.bindPopup(e.NAME);
+		// need to add all of these to a list and append it on each click
+		// addCircle works up i cant extend the e event to within the popup content
+
+};
+
+
+
+
+function addCamPopup(e) {
+	// working popup on mouse location
+	//heres the embedded txt box + '</br></br>Add point feature? </br></br> <button id="yes" onClick="addCircle()">Yes</button> &nbsp <button onClick="map.closePopup()">No</button></br></br><textarea id="name">  </textarea>')
+	var coords = e.latlng.toString().replace('LatLng(','').replace(')','' );
+	var addCamText = '</br></br>Add point feature? </br></br> <button id="yes" onClick="addCircle(coords)">Add</button> &nbsp <button onClick="map.closePopup()">Close</button></br></br><textarea id="CameraName"></textarea>';
+	console.log(coords) //verify coordinates
 	var popup = L.popup()
         .setLatLng(e.latlng)
-        .setContent(coord)
+        .setContent(coords + addCamText)
         .openOn(map);
-
-
 
 	popup.setLatLng(e.latlng).openOn(map);
 
+};
 
 
 
-}
-//creation of the Leaflet map
-var map = L.map('map', options);
+map.on('click', addCamPopup); // popup on mouse location
 
-//request to load basemap
+/*
 
-map.on('click', getCoor);
+// start Out put
+function addCircle(e) {
+	console.log(e.latlng.lat + ',' + e.latlng.lng);
+	L.circle([e.latlng.lat,e.latlng.lng],circ_options)
+		.addTo(map)
+		.bindPopup(e.NAME);
+
+		// need to add all of these to a list and append it on each click
+		// addCircle works up i cant extend the e event to within the popup content
+
+};
+
+function onMapClick(e){
+	var coords = e.
+	coordinates
+				.setLatLng(e.latlng)
+				.setContent(e.latlng.toString().replace('LatLng(' , '').replace(')','') + '</br></br>Add point feature? </br></br> <button id="yes" onClick="addCircle()">Yes</button> &nbsp <button onClick="map.closePopup()">No</button></br></br><textarea id="name">  </textarea>')
+				.openOn(map);
+
+};
+//map.on('click', onMapClick);
+
+map.on('click' , addCircle);
+
+*/
+
+
+
+
+
 
 /*
 ALTERNATE_TOPOBASEMAP
@@ -94,28 +159,19 @@ var USGS_USImageryTopo = L.tileLayer('https://basemap.nationalmap.gov/arcgis/res
 	attribution: 'Tiles courtesy of the <a href="https://usgs.gov/">U.S. Geological Survey</a>'
 }).addTo(map);
 */
-// Esri Basemap has more zoom
-var Esri_WorldImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-	attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
-}).addTo(map);
+
+
 
 //#0096FF is red
 //#ff3300 is blue
-var circ_options = {
-	color: "#ff3300",
-	opacity: .8,
-	fillColor: '#ff3300',
-	radius: 10,
-	fillOpacity: .9,
-}
+
 
 //camera point features variables
 var townHallCam1 = L.circle([36.217891, -81.682866], circ_options).addTo(map)
 
 var hopeCenterCam1 = L.circle([36.218263, -81.685100] , circ_options).addTo(map)
 
-var libraryEagle = L.circle([36.215189, -81.679876],circ_options).addTo(map)
-
+var libraryEagle = L.circle([36.215189, -81.679876], circ_options).addTo(map)
 
 // tooltips and information on each camera
 
