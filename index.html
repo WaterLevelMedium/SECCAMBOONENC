@@ -17,6 +17,13 @@
   <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"
     integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
     crossorigin=""></script>
+	<script src='newPoints.js'></script>
+	#use the css and js files from pyscript.net
+<link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css" />
+<!--<script defer src="https://pyscript.net/alpha/pyscript.js"></script>-->
+
+
+
 <!-- Nice background-color from sonny rollins website : #3c3b4a -->
 	<style>
 
@@ -39,14 +46,23 @@
 			width: 100%;
       height: 100%;
 		}
-
+		#showPoints {
+			background-color: #fffff2;
+			font-size: 11px;
+			position: absolute;
+			display: inline-flex;
+			padding: 5px;
+			margin: 15px;
+			right: 8px;
+			z-index: 800;
+		}
 	</style>
 </head>
 
 <body>
 
 	<div id='map'></div>
-
+	<div id='showPoints'><button onClick='cameraTables()'>Camera Table</button></div>
 
 <script>
 
@@ -67,79 +83,94 @@ var circ_options = {
 	fillOpacity: .9,
 };
 
-var map = L.map('map', options);
+//creation of the Leaflet map
+	const newPoints = [];
+
+	var map = L.map('map', options);
 
 // Esri Basemap has more zoom
 var Esri_WorldImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
 	attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
 }).addTo(map);
 
-// END TILE SETUP
+	// start Out put
+	function addCircle(e) {
+		var coords = e.latlng.toString().replace('LatLng(','').replace(')','' );
+		console.log(e.latlng.lat + ',' + e.latlng.lng);
+		L.circle([e.latlng.lat,e.latlng.lng],circ_options)
+			.addTo(map)
+			.bindPopup(e.NAME);
+
+		let nameInput = document.getElementById('camName').value;
+		//newPoints.push('Cam: ' + nameInput + 'Coordinates :' + coords);
+
+
+		};
+
+
+
+
+			// need to add all of these to a list and append it on each click
+			// addCircle works up i cant extend the e event to within the popup content
+		function addPoint(coords){
+		let nameInput = document.getElementById('camName').value;
+
+		if (nameInput != 'undefined' || nameInput != '' ){
+		newPoints.push('Cam: ' + nameInput + 'Coordinates :' + coords);
+		map.closePopup();
+		}
+
+
+		};
+
+			/*
+		 let pythonText = {'<py-script>
+				import os
+				nameInput = document.getElementById("camName")
+				print(os.getcwd())
+			</py-script>'};
+			*/
 
 
 // START UI
 
-// adds circle on map but cant figure out how to append
-function addCircle(coords) {
-	console.log('working... heres the event obj' , coords)
-	console.log(coords);
-	L.circle([e.latlng.lat,e.latlng.lng],circ_options)
-		.addTo(map)
-		.bindPopup(e.NAME);
-		// need to add all of these to a list and append it on each click
-		// addCircle works up i cant extend the e event to within the popup content
+  function onMapClick(e){
+		var coordinateString = e.latlng.toString().replace('LatLng(','').replace(')','' );
+		// '</br></br>Add point feature? </br></br> <button id="yes" onClick="addCircle()">Yes</button> &nbsp <button onClick="map.closePopup()">No</button></br></br><textarea id="name">  </textarea>'
 
+		var cPop = L.popup()
+          .setLatLng(e.latlng)
+          .setContent('<div position="float", id="promptBox"><br><input padding="10px", type="text" id="camName" placeholder="Double Click to Add Camera"></input>&nbsp&nbsp&nbsp&nbsp&nbsp<button id="enter", onClick="addPoint(' + coordinateString + ')">Enter</button><br>' + coordinateString + '</div>')
+          .openOn(map);
+
+		var coords = e.latlng.toString().replace('LatLng(','').replace(')','' );
+		console.log(e.latlng.lat + ',' + e.latlng.lng);
+		L.circle([e.latlng.lat,e.latlng.lng],circ_options)
+				.addTo(map)
+				.bindPopup(e.NAME);
+
+		let nameInput = document.getElementById('camName').value;
+		newPoints.push(nameInput);
+
+		//alert(newPoints);
+		writeNewCircles();
+  };
+
+	function cameraTables(){
+		alert(newPoints);
+	};
+
+  //map.on('click', onMapClick);
+
+//map.on('click' , onMapClick);
+map.on('dblclick',  onMapClick);
+map.on('dblclick', addCircle);
+
+
+function writeNewCircles(){
+	let nameInput = document.getElementById('camName').value;
+	console.log(nameInput , newPoints);
 };
-
-
-
-
-function addCamPopup(e) {
-	// working popup on mouse location
-	//heres the embedded txt box + '</br></br>Add point feature? </br></br> <button id="yes" onClick="addCircle()">Yes</button> &nbsp <button onClick="map.closePopup()">No</button></br></br><textarea id="name">  </textarea>')
-	var coords = e.latlng.toString().replace('LatLng(','').replace(')','' );
-	var addCamText = '</br></br>Add point feature? </br></br> <button id="yes" onClick="addCircle(coords)">Add</button> &nbsp <button onClick="map.closePopup()">Close</button></br></br><textarea id="CameraName"></textarea>';
-	console.log(coords) //verify coordinates
-	var popup = L.popup()
-        .setLatLng(e.latlng)
-        .setContent(coords + addCamText)
-        .openOn(map);
-
-	popup.setLatLng(e.latlng).openOn(map);
-
-};
-
-
-
-map.on('click', addCamPopup); // popup on mouse location
-
-/*
-
-// start Out put
-function addCircle(e) {
-	console.log(e.latlng.lat + ',' + e.latlng.lng);
-	L.circle([e.latlng.lat,e.latlng.lng],circ_options)
-		.addTo(map)
-		.bindPopup(e.NAME);
-
-		// need to add all of these to a list and append it on each click
-		// addCircle works up i cant extend the e event to within the popup content
-
-};
-
-function onMapClick(e){
-	var coords = e.
-	coordinates
-				.setLatLng(e.latlng)
-				.setContent(e.latlng.toString().replace('LatLng(' , '').replace(')','') + '</br></br>Add point feature? </br></br> <button id="yes" onClick="addCircle()">Yes</button> &nbsp <button onClick="map.closePopup()">No</button></br></br><textarea id="name">  </textarea>')
-				.openOn(map);
-
-};
-//map.on('click', onMapClick);
-
-map.on('click' , addCircle);
-
-*/
 
 
 
@@ -167,20 +198,19 @@ var USGS_USImageryTopo = L.tileLayer('https://basemap.nationalmap.gov/arcgis/res
 
 
 //camera point features variables
-var townHallCam1 = L.circle([36.217891, -81.682866], circ_options).addTo(map)
+var townHallCam1 = L.circle([36.217891, -81.682866], circ_options).addTo(map);
 
-var hopeCenterCam1 = L.circle([36.218263, -81.685100] , circ_options).addTo(map)
+var hopeCenterCam1 = L.circle([36.218263, -81.685100] , circ_options).addTo(map);
 
-var libraryEagle = L.circle([36.215189, -81.679876], circ_options).addTo(map)
+var libraryEagle = L.circle([36.215189, -81.679876], circ_options).addTo(map);
 
 // tooltips and information on each camera
 
-townHallCam1.bindTooltip("<b>Cameras on Town Hall </b> </br> There's like three different cameras </br> aimed at the street, the sidewalk, </br> and the stop light on the awning of the Hall.").addTo(map)
+townHallCam1.bindTooltip("<b>Cameras on Town Hall </b> </br> There's like three different cameras </br> aimed at the street, the sidewalk, </br> and the stop light on the awning of the Hall.").addTo(map);
 
-hopeCenterCam1.bindTooltip('<b>The Hope Center</b> </br> This is the town "Pregnancy Services" clinic. </br> They monitor entry and exit from one </br> camera on the street mounted </br> on the door.').addTo(map)
+hopeCenterCam1.bindTooltip('<b>The Hope Center</b> </br> This is the town "Pregnancy Services" clinic. </br> They monitor entry and exit from one </br> camera on the street mounted </br> on the door.').addTo(map);
 
-libraryEagle.bindTooltip('<b> App State Library </b> </br> This camera resides above the coffee shop for the library. </br> Not sure which way it points... No access.').addTo(map)
-
+libraryEagle.bindTooltip('<b> App State Library </b> </br> This camera resides above the coffee shop for the library. </br> Not sure which way it points... No access.').addTo(map);
 
 </script>
 
