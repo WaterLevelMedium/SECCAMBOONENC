@@ -112,16 +112,7 @@ var Esri_WorldImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest
 
 			// need to add all of these to a list and append it on each click
 			// addCircle works up i cant extend the e event to within the popup content
-		function addPoint(coords){
-		let nameInput = document.getElementById('camName').value;
 
-		if (nameInput != 'undefined' || nameInput != '' ){
-		newPoints.push('Cam: ' + nameInput + 'Coordinates :' + coords);
-		map.closePopup();
-		}
-
-
-		};
 
 			/*
 		 let pythonText = {'<py-script>
@@ -133,14 +124,27 @@ var Esri_WorldImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest
 
 
 // START UI
+		function addPoint(lat , lng){
+			let nameInput = document.getElementById('camName').value;
+			console.log(lat + lng);
+			if (nameInput != 'undefined' || nameInput != '' ){
+				newPoints.push('|Name: ' + nameInput + '\t|Coordinates:\t' + lat +', ' +  lng + '|\n\n');
+				map.closePopup();
+				map.setZoom(15);
+			};
 
+
+};
   function onMapClick(e){
 		var coordinateString = e.latlng.toString().replace('LatLng(','').replace(')','' );
 		// '</br></br>Add point feature? </br></br> <button id="yes" onClick="addCircle()">Yes</button> &nbsp <button onClick="map.closePopup()">No</button></br></br><textarea id="name">  </textarea>'
-
+		var lat = e.latlng.lat.toFixed(5) ;
+		var lng = e.latlng.lng.toFixed(5) ;
+		var coordinates = lat.toString + lng.toString;
+		console.log('jesus' + lat + lng);
 		var cPop = L.popup()
           .setLatLng(e.latlng)
-          .setContent('<div position="float", id="promptBox"><br><input padding="10px", type="text" id="camName" placeholder="Double Click to Add Camera"></input>&nbsp&nbsp&nbsp&nbsp&nbsp<button id="enter", onClick="addPoint(' + coordinateString + ')">Enter</button><br>' + coordinateString + '</div>')
+          .setContent('<br><input padding="10px", type="text" id="camName" placeholder="Double Click to Add Camera"></input>&nbsp&nbsp&nbsp&nbsp&nbsp<button id="enter", onClick="addPoint(' + lat + ',' + lng + ')">Enter</button><br>' + coordinateString)
           .openOn(map);
 
 		var coords = e.latlng.toString().replace('LatLng(','').replace(')','' );
@@ -149,14 +153,15 @@ var Esri_WorldImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest
 				.addTo(map)
 				.bindPopup(e.NAME);
 
-		let nameInput = document.getElementById('camName').value;
-		newPoints.push(nameInput);
+		//let nameInput = document.getElementById('camName').value;
+		//newPoints.push(nameInput);
 
 		//alert(newPoints);
 		writeNewCircles();
   };
 
 	function cameraTables(){
+		console.log(newPoints);
 		alert(newPoints);
 	};
 
