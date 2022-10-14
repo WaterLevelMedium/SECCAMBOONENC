@@ -1,6 +1,7 @@
 <<!DOCTYPE html>
 <html>
 <head>
+	<base href="index.html" target="_blank">
 	<meta charset=utf-8 />
 	<title id="title">Security Cameras in Boone </title>
 	<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
@@ -56,6 +57,16 @@
 			right: 8px;
 			z-index: 800;
 		}
+		#tables {
+			background-color: #fffff2;
+			font-size: 11px;
+			position: absolute;
+			display: inline-flex;
+			padding: 5px;
+			margin: 15px;
+			right: 100px;
+			z-index: 800;
+		}
 	</style>
 </head>
 
@@ -63,9 +74,12 @@
 
 	<div id='map'></div>
 	<div id='showPoints'><button onClick='cameraTables()'>Camera Table</button></div>
+	<div id='tables'><input type=button onClick="toTables()" value='View Points'></div>
+
+
 
 <script>
-
+//location.href='tables.html
 //center viewport add zoom para
 var options = {
 //center edited to align with trail system
@@ -85,7 +99,7 @@ var circ_options = {
 
 //creation of the Leaflet map
 	const newPoints = [];
-
+	const pointsTable = [];
 	var map = L.map('map', options);
 
 // Esri Basemap has more zoom
@@ -107,13 +121,6 @@ var Esri_WorldImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest
 
 		};
 
-
-
-
-			// need to add all of these to a list and append it on each click
-			// addCircle works up i cant extend the e event to within the popup content
-
-
 			/*
 		 let pythonText = {'<py-script>
 				import os
@@ -128,7 +135,12 @@ var Esri_WorldImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest
 			let nameInput = document.getElementById('camName').value;
 			console.log(lat + lng);
 			if (nameInput != 'undefined' || nameInput != '' ){
-				newPoints.push('|Name: ' + nameInput + '\t|Coordinates:\t' + lat +', ' +  lng + '|\n\n');
+				let text = '|Name: ' + nameInput + '\t|Coordinates:\t' + lat +', ' +  lng + '|\n\n';
+				var table = '<tr><td>' + nameInput + '</td><td>' + lat + ',' + lng + '</td></tr>';
+				newPoints.push(text);
+				pointsTable.push(table);
+				console.log('table', table);
+				console.log(text);
 				map.closePopup();
 				map.setZoom(15);
 			};
@@ -163,6 +175,7 @@ var Esri_WorldImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest
 	function cameraTables(){
 		console.log(newPoints);
 		alert(newPoints);
+
 	};
 
   //map.on('click', onMapClick);
@@ -176,10 +189,29 @@ function writeNewCircles(){
 	let nameInput = document.getElementById('camName').value;
 	console.log(nameInput , newPoints);
 };
+// TABLES POPUP
+function toTables(){
+
+
+
+	var tables = window.open('tables.html','tab', 'width=700,height=500 top=200,left=600');
+	tables.document.write('<style>table, th, tr, td{border: 1px solid black}</style>');
+	tables.document.write('<table><tr style="border:1px solid black"><th>Camera Location</th><th>Lat / Lng</th><th>Description</th></tr>' + pointsTable + '</table>');
+
+
+};
 
 
 
 
+	//kinda 10132022 try to loop through the newPoints list of values
+	// and then transfer them into the table th tr td td td
+
+	//var newWindowBody = newWindow.document.createElement('p');
+	// var text = document.createTextNode(newPoints);
+	//newWindowBody.innerText = newPoints;
+//	console.log(text);
+//	newWindowBody.appendChild(text);
 
 
 /*
@@ -216,6 +248,11 @@ townHallCam1.bindTooltip("<b>Cameras on Town Hall </b> </br> There's like three 
 hopeCenterCam1.bindTooltip('<b>The Hope Center</b> </br> This is the town "Pregnancy Services" clinic. </br> They monitor entry and exit from one </br> camera on the street mounted </br> on the door.').addTo(map);
 
 libraryEagle.bindTooltip('<b> App State Library </b> </br> This camera resides above the coffee shop for the library. </br> Not sure which way it points... No access.').addTo(map);
+
+// ------------------
+
+
+
 
 </script>
 
