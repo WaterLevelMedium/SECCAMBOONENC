@@ -67,6 +67,11 @@
 			right: 100px;
 			z-index: 800;
 		}
+
+		#enter {
+
+			border
+		}
 	</style>
 </head>
 
@@ -136,7 +141,7 @@ var Esri_WorldImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest
 			console.log(lat + lng);
 			if (nameInput != 'undefined' || nameInput != '' ){
 				let text = '|Name: ' + nameInput + '\t|Coordinates:\t' + lat +', ' +  lng + '|\n\n';
-				var table = '<tr><td>' + nameInput + '</td><td>' + lat + ',' + lng + '</td></tr>';
+				var table = '<tr><td>' + nameInput + '</td><td>' + lat + ',' + lng + '</td><td><submit></td></tr>';
 				newPoints.push(text);
 				pointsTable.push(table);
 				console.log('table', table);
@@ -192,11 +197,17 @@ function writeNewCircles(){
 // TABLES POPUP
 function toTables(){
 
+	// window.open('test.html','__blank').document.write('<html><p>TEST</p></html>');
+	var tableInnerText = `<table>
+		<tr style="border:1px solid black">
+		<th>Camera Location</th>
+		<th>Lat / Lng</th>
+		<th>Description</th></tr>` + pointsTable + `</table>`
+	;
 
-
-	var tables = window.open('tables.html','tab', 'width=700,height=500 top=200,left=600');
+	var tables = window.open('tables.html','__tables');// 'width=700,height=500 top=200,left=600');
 	tables.document.write('<style>table, th, tr, td{border: 1px solid black}</style>');
-	tables.document.write('<table><tr style="border:1px solid black"><th>Camera Location</th><th>Lat / Lng</th><th>Description</th></tr>' + pointsTable + '</table>');
+	tables.document.write(tableInnerText);
 
 
 };
