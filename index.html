@@ -69,13 +69,12 @@
 			font-size: 11px;
 			position: absolute;
 			display: inline-flex;
-			padding: 5px;
-			margin: 15px;
 			z-index: 800;
 		}
 		#tablesCollapse {
 			z-index: 900;
 		}
+
 
 	</style>
 </head>
@@ -86,7 +85,7 @@
 
 	<nav id="navBar" class="navbar navbar-light" style="background-color: #e3e2fe">
 
-		<a class="navbar-brand h1" href="tables.html" style="text-align:right">
+		<a class="navbar-brand h1" href="#" style="text-align:right">
 		<object data="assets\1499683972.svg" width="30" height="30" class="d-inline-block align-top" alt="" ></object>
 		Security Cameras</br> of Boone, NC</a>
 		<!-- <div class='buttons' id='showPoints'><button onClick='cameraTables()'>Camera Table</button></div>
@@ -199,8 +198,8 @@ function downloadData() {
 				var dropTable = '<div class="row"><div class="col-sm">' + nameInput + '</div>' + '<div class="col-sm">' + lat + ',' + lng + '</div><div class="col-sm">'+ userDesc + '</div></div>';
 				document.getElementById('insertTheText').innerHTML += dropTable;
 				csvTables.push(nameInput +  ',' + lat + ',' + lng + ',' + userDesc + '\n');
-				var devAdd = 'var ' + nameInput + ' = L.marker(['+lat+','+lng+']), {icon: cameraIcon}).addTo(map);'
-				var devAddToolTip = nameInput + '.bindTooltip("' + dropTable + '")';
+				var devAdd = 'var ' + nameInput.replace(' ','') + ' = L.marker(['+lat+','+lng+'], {icon: cameraIcon}).addTo(map);'
+				var devAddToolTip = nameInput.replace(' ' , '') + ".bindTooltip('" + dropTable + "');";
 				console.log(devAdd);
 				console.log(devAddToolTip);
 				map.closePopup();
@@ -285,12 +284,14 @@ function toTables(){
 
 // begin taken point entry
 
+var AlleyWall = L.marker([36.21877,-81.68455], {icon: cameraIcon}).addTo(map);
+
+AlleyWall.bindTooltip('<div class="row"><div class="col-sm">Alley Wall</div><div class="col-sm">36.21877,-81.68455</div><div class="col-sm">In small alley between buildings off King St.</div></div>');
+
+//end taken point entry
 
 
-//end taken point entry 
-
-
-
+var MastGeneral = L.marker([36.21857,-81.68363], {icon: cameraIcon}).addTo(map);
 var townHallCam1 = L.marker([36.217891, -81.682866], {icon: cameraIcon}).addTo(map);
 
 var hopeCenterCam1 = L.marker([36.218263, -81.685100] , {icon: cameraIcon}).addTo(map);
@@ -300,7 +301,7 @@ var libraryEagle = L.marker([36.215189, -81.679876], {icon: cameraIcon}).addTo(m
 townHallCam1.bindTooltip("<b>Cameras on Town Hall </b> </br> Three different cameras </br> aimed at the street, the sidewalk, </br> and the stop light on the awning of the Hall.").addTo(map);
 
 hopeCenterCam1.bindTooltip('<b>The Hope Center</b> </br> Entry/exit, one </br> camera on the street mounted </br> on the door.').addTo(map);
-
+MastGeneral.bindTooltip('<div class="row"><div class="col-sm">Mast General</div><div class="col-sm">36.21857,-81.68363</div><div class="col-sm">At seam of building, dome style.</div></div>');
 libraryEagle.bindTooltip('<b> App State Library </b> </br> This camera resides above the coffee shop for the library. </br> Not sure which way it points... No access.').addTo(map);
 // ------------------
 
