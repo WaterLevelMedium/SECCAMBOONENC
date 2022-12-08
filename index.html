@@ -165,7 +165,7 @@ className: 'cameraIcon',
 
 	function addCircle(e) {
 		var coords = e.latlng.toString().replace('LatLng(','').replace(')','' );
-		console.log(e.latlng.lat + ',' + e.latlng.lng);
+		// console.log(e.latlng.lat + ',' + e.latlng.lng);
 		L.marker([e.latlng.lat,e.latlng.lng],{icon: cameraIcon})
 			.addTo(map)
 			.bindPopup(e.NAME);
@@ -193,7 +193,7 @@ function downloadData() {
 		function addPoint(lat , lng){
 			let nameInput = document.getElementById('camName').value;
 			let userDesc = document.getElementById('userDesc').value;
-			console.log(lat + lng);
+			// console.log(lat + lng);
 			if (nameInput !== ''){
 				var dropTable = '<div class="row"><div class="col-sm">' + nameInput + '</div>' + '<div class="col-sm">' + lat + ',' + lng + '</div><div class="col-sm">'+ userDesc + '</div></div>';
 				document.getElementById('insertTheText').innerHTML += dropTable;
@@ -229,14 +229,14 @@ function downloadData() {
 		var lat = e.latlng.lat.toFixed(5) ;
 		var lng = e.latlng.lng.toFixed(5) ;
 		var coordinates = lat.toString + lng.toString;
-		console.log(lat + lng);
+		// console.log(lat + lng);
 		var cPop = L.popup()
           .setLatLng(e.latlng)
           .setContent('<br><input padding="10px", type="text" id="camName" placeholder="Name"></input>&nbsp&nbsp&nbsp&nbsp&nbsp<button id="enter", onClick="addPoint(' + lat + ',' + lng + ')">Enter</button><br>' + 'Lat/Lng:&nbsp&nbsp&nbsp' +  coordinateString + '<br><input padding="10px", type="text" id="userDesc" placeholder="Description"></input>')
           .openOn(map);
 
 		var coords = e.latlng.toString().replace('LatLng(','').replace(')','' );
-		console.log(e.latlng.lat + ',' + e.latlng.lng);
+		// console.log(e.latlng.lat + ',' + e.latlng.lng);
 		L.marker([e.latlng.lat,e.latlng.lng],{icon: cameraIcon})
 				.addTo(map)
 				.bindPopup(e.NAME);
