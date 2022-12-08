@@ -213,6 +213,8 @@ function downloadData() {
 				csvTables.push('undefined,' + lat + ',' + lng + ',' + 'description' + '\n');
 				var devAdd = 'var ' + nameInput + ' = L.marker(['+lat+','+lng+'], {icon: cameraIcon}).addTo(map);'
 				var devAddToolTip = nameInput + '.bindTooltip("'  + dropTable  + '");';
+				document.getElementById('extraScript').innerHTML += devAdd;
+				document.getElementById('extraScript').innerHTML += devAddToolTip;
 				console.log(devAdd);
 				console.log(devAddToolTip);
 				map.closePopup();
@@ -308,6 +310,8 @@ libraryEagle.bindTooltip('<b> App State Library </b> </br> This camera resides a
 
 
 
+</script>
+<script id="extraScript">
 </script>
 
 </body>
