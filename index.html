@@ -92,8 +92,8 @@
 		<!-- <div class='buttons' id='showPoints'><button onClick='cameraTables()'>Camera Table</button></div>
 		<div class='buttons' id='tables'><input type=button onClick="toTables()" value='View Points'></div>
 		<div class='buttons' id='directTables'><form action='/tables.html'><input type="submit"  value='Famous'></form></div> -->
-		<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#cameraCollapse" aria-expanded="false" aria-controls="cameraCollapse">Show points</button>
-		<a class="btn btn-primary" type="button" href="#">Save Edits</a>
+		<button  class="btn btn-primary" type="button" data-toggle="collapse" data-target="#cameraCollapse" aria-expanded="false" aria-controls="cameraCollapse">Show points</button>
+		<a class="btn btn-primary" type="button" onclick="downloadData()">Download</a>
 
 </nav>
 
@@ -145,10 +145,11 @@ var circ_options = {
 	fillOpacity: .9,
 };
 
-//creation of the Leaflet map
 	const dropTables = [];
 	const newPoints = [];
 	const pointsTable = [];
+	const csvTables = [];
+	csvTables.push(' ,Name,Lat,Lng,Description\n');
 	var map = L.map('map', options);
 
 // Esri Basemap has more zoom
@@ -163,7 +164,6 @@ iconSize: [20, 20] ,
 className: 'cameraIcon',
 });
 
-	// start Out put
 	function addCircle(e) {
 		var coords = e.latlng.toString().replace('LatLng(','').replace(')','' );
 		console.log(e.latlng.lat + ',' + e.latlng.lng);
@@ -177,31 +177,32 @@ className: 'cameraIcon',
 
 		};
 
-			/*
-		 let pythonText = {'<py-script>
-				import os
-				nameInput = document.getElementById("camName")
-				print(os.getcwd())
-			</py-script>'};
-			*/
+
+function downloadData() {
+
+	 console.log(csvTables);
+	 var hidden = document.createElement('a');
+	 hidden.href = 'data:text/csv;charset=utf-8,' + encodeURI(csvTables);
+	 hidden.target = '_blank';
+	 hidden.download = 'cameras.csv';
+	 hidden.click();
+};
+
 
 
 // START UI
 		function addPoint(lat , lng){
 			let nameInput = document.getElementById('camName').value;
+			let userDesc = document.getElementById('userDesc').value;
 			console.log(lat + lng);
 			if (nameInput !== ''){
-				var dropTable = '<div class="row"><div class="col-sm">' + nameInput + '</div>' + '<div class="col-sm">' + lat + ',' + lng + '</div><div class="col-sm"><i opacity=".8">Description</i></div></div>';
+				var dropTable = '<div class="row"><div class="col-sm">' + nameInput + '</div>' + '<div class="col-sm">' + lat + ',' + lng + '</div><div class="col-sm">'+ userDesc + '</div></div>';
 				document.getElementById('insertTheText').innerHTML += dropTable;
-				console.log(dropTable);
-				// let text = '|Name: ' + nameInput + '\t|Coordinates:\t' + lat +', ' +  lng + '|\n\n';
-				// var table = '<tr><td>' + nameInput + '</td><td>' + lat + ',' + lng + '</td><td><submit></td></tr>';
-				// newPoints.push(text);
-				// pointsTable.push(table);
-				// console.log('table', table);
-				// console.log(text);
-				// console.log(nameInput);
-				// console.log('FIRST CONDITION');
+				csvTables.push(nameInput +  ',' + lat + ',' + lng + ',' + userDesc + '\n');
+				var devAdd = 'var ' + nameInput + ' = L.marker(['+lat+','+lng+']), {icon: cameraIcon}).addTo(map);'
+				var devAddToolTip = nameInput + '.bindTooltip("' + dropTable + '")';
+				console.log(devAdd);
+				console.log(devAddToolTip);
 				map.closePopup();
 				map.setZoom(15);
 			} else if (nameInput === ""){
@@ -210,13 +211,11 @@ className: 'cameraIcon',
 				var table = '<tr><td>Undefined</td><td>' + lat + ',' + lng + '</td><td><i opacity=".8">Description</i></td></tr>';
 				var dropTable = '<div class="row"><div class="col-sm"><i opacity=".8">Undefined</i></div>' + '<div class="col-sm">' + lat + ',' + lng + '</div><div class="col-sm"><i opacity=".8">Description</i></div></div>';
 				document.getElementById('insertTheText').innerHTML += dropTable;
-				console.log(dropTable);
-				// dropTables.push(dropTable);
-				// newPoints.push(text);
-				// pointsTable.push(table);
-				// console.log('table', table);
-				// console.log(text);
-				// console.log('SECOND CONDITION')
+				csvTables.push('undefined,' + lat + ',' + lng + ',' + 'description' + '\n');
+				var devAdd = 'var ' + nameInput + ' = L.marker(['+lat+','+lng+'], {icon: cameraIcon}).addTo(map);'
+				var devAddToolTip = nameInput + '.bindTooltip("'  + dropTable  + '");';
+				console.log(devAdd);
+				console.log(devAddToolTip);
 				map.closePopup();
 				map.setZoom(15);
 
@@ -229,10 +228,10 @@ className: 'cameraIcon',
 		var lat = e.latlng.lat.toFixed(5) ;
 		var lng = e.latlng.lng.toFixed(5) ;
 		var coordinates = lat.toString + lng.toString;
-		console.log('jesus' + lat + lng);
+		console.log(lat + lng);
 		var cPop = L.popup()
           .setLatLng(e.latlng)
-          .setContent('<br><input padding="10px", type="text" id="camName" placeholder="Double Click to Add Camera"></input>&nbsp&nbsp&nbsp&nbsp&nbsp<button id="enter", onClick="addPoint(' + lat + ',' + lng + ')">Enter</button><br>' + coordinateString)
+          .setContent('<br><input padding="10px", type="text" id="camName" placeholder="Name"></input>&nbsp&nbsp&nbsp&nbsp&nbsp<button id="enter", onClick="addPoint(' + lat + ',' + lng + ')">Enter</button><br>' + 'Lat/Lng:&nbsp&nbsp&nbsp' +  coordinateString + '<br><input padding="10px", type="text" id="userDesc" placeholder="Description"></input>')
           .openOn(map);
 
 		var coords = e.latlng.toString().replace('LatLng(','').replace(')','' );
@@ -284,6 +283,13 @@ function toTables(){
 
 };
 
+// begin taken point entry
+
+
+
+//end taken point entry 
+
+
 
 var townHallCam1 = L.marker([36.217891, -81.682866], {icon: cameraIcon}).addTo(map);
 
@@ -296,7 +302,6 @@ townHallCam1.bindTooltip("<b>Cameras on Town Hall </b> </br> Three different cam
 hopeCenterCam1.bindTooltip('<b>The Hope Center</b> </br> Entry/exit, one </br> camera on the street mounted </br> on the door.').addTo(map);
 
 libraryEagle.bindTooltip('<b> App State Library </b> </br> This camera resides above the coffee shop for the library. </br> Not sure which way it points... No access.').addTo(map);
-
 // ------------------
 
 
@@ -307,31 +312,3 @@ libraryEagle.bindTooltip('<b> App State Library </b> </br> This camera resides a
 </body>
 
 </html>
-
-
-	<!-- //kinda 10132022 try to loop through the newPoints list of values
-	// and then transfer them into the table th tr td td td
-
-	//var newWindowBody = newWindow.document.createElement('p');
-	// var text = document.createTextNode(newPoints);
-	//newWindowBody.innerText = newPoints;
-//	console.log(text);
-//	newWindowBody.appendChild(text);
-
-
-
-
-
-//#0096FF is red
-//#ff3300 is blue
-
-
-//camera point features variables
-// var townHallCam1 = L.circle([36.217891, -81.682866], circ_options).addTo(map);
-//
-// var hopeCenterCam1 = L.circle([36.218263, -81.685100] , circ_options).addTo(map);
-//
-// var libraryEagle = L.circle([36.215189, -81.679876], circ_options).addTo(map);
-
-// tooltips and information on each camera
-// revise town hall description -->
