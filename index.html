@@ -5,6 +5,7 @@
 	<meta charset=utf-8 />
 	<title id="title">Security Cameras in Boone </title>
 	<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.14.0/css/all.css">
 
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.css" />
 	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.1/dist/leaflet.css" />
@@ -72,6 +73,8 @@
 
 			border
 		}
+
+
 	</style>
 </head>
 
@@ -98,7 +101,7 @@ var circ_options = {
 	color: "#ff3300",
 	opacity: .8,
 	fillColor: '#ff3300',
-	radius: 10,
+	radius: 8,
 	fillOpacity: .9,
 };
 
@@ -112,11 +115,18 @@ var Esri_WorldImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest
 	attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
 }).addTo(map);
 
+
+const cameraIcon = L.divIcon({
+html: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path fill-opacity=".8" fill="#ff3300" border="4px solid #000000"  d="M0 128C0 92.7 28.7 64 64 64H320c35.3 0 64 28.7 64 64V384c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V128zM559.1 99.8c10.4 5.6 16.9 16.4 16.9 28.2V384c0 11.8-6.5 22.6-16.9 28.2s-23 5-32.9-1.6l-96-64L416 337.1V320 192 174.9l14.2-9.5 96-64c9.8-6.5 22.4-7.2 32.9-1.6z"/></svg>',
+iconSize: [20, 20] ,
+className: 'cameraIcon',
+});
+
 	// start Out put
 	function addCircle(e) {
 		var coords = e.latlng.toString().replace('LatLng(','').replace(')','' );
 		console.log(e.latlng.lat + ',' + e.latlng.lng);
-		L.circle([e.latlng.lat,e.latlng.lng],circ_options)
+		L.marker([e.latlng.lat,e.latlng.lng],{icon: cameraIcon})
 			.addTo(map)
 			.bindPopup(e.NAME);
 
@@ -139,17 +149,29 @@ var Esri_WorldImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest
 		function addPoint(lat , lng){
 			let nameInput = document.getElementById('camName').value;
 			console.log(lat + lng);
-			if (nameInput != 'undefined' || nameInput != '' ){
+			if (nameInput !== ''){
 				let text = '|Name: ' + nameInput + '\t|Coordinates:\t' + lat +', ' +  lng + '|\n\n';
 				var table = '<tr><td>' + nameInput + '</td><td>' + lat + ',' + lng + '</td><td><submit></td></tr>';
 				newPoints.push(text);
 				pointsTable.push(table);
 				console.log('table', table);
 				console.log(text);
+				console.log(nameInput);
+				console.log('FIRST CONDITION');
+				map.closePopup();
+				map.setZoom(15);
+			} else if (nameInput === ""){
+				let nameInput = "Undefined";
+				let text = '|Name: Undefined \t|Coordinates:\t' + lat +', ' +  lng + '|\n\n';
+				var table = '<tr><td>Undefined</td><td>' + lat + ',' + lng + '</td><td><i opacity=".8">Description</i></td></tr>';
+				newPoints.push(text);
+				pointsTable.push(table);
+				console.log('table', table);
+				console.log(text);
+				console.log('SECOND CONDITION')
 				map.closePopup();
 				map.setZoom(15);
 			};
-
 
 };
   function onMapClick(e){
@@ -166,7 +188,7 @@ var Esri_WorldImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest
 
 		var coords = e.latlng.toString().replace('LatLng(','').replace(')','' );
 		console.log(e.latlng.lat + ',' + e.latlng.lng);
-		L.circle([e.latlng.lat,e.latlng.lng],circ_options)
+		L.marker([e.latlng.lat,e.latlng.lng],{icon: cameraIcon})
 				.addTo(map)
 				.bindPopup(e.NAME);
 
