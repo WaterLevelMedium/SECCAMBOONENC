@@ -1,7 +1,7 @@
 ---
 ## Security Cameras in Boone, NC
 
-> [Direct link](ttps://waterlevelmedium.github.io/SecurityCamLocator/)
+> [Direct link](https://waterlevelmedium.github.io/SecurityCamLocator/)
 - Displays the locations of security cameras throughout Boone, NC as point features
 #### Process to add points
  - Double click at desired location, enter name of camera and optional Description
