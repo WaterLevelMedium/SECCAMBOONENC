@@ -1,10 +1,12 @@
 <<!DOCTYPE html>
 <html>
 <head>
+
+
 	<base href="index.html" target="_blank">
 	<meta charset=utf-8 />
-	<title id="title">Security Cameras in Boone </title>
-	<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+	<title id="title">Security in Boone, NC </title>
+	<meta name='viewport' content='width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no' />
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.14.0/css/all.css">
 
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.css" />
@@ -15,12 +17,18 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
   integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ=="
   crossorigin=""/>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
   <!-- Make sure you put this AFTER Leaflet's CSS -->
   <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"
     integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
     crossorigin=""></script>
 	<script src='newPoints.js'></script>
-	#use the css and js files from pyscript.net
+	<!-- #use the css and js files from pyscript.net -->
 <link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css" />
 <!--<script defer src="https://pyscript.net/alpha/pyscript.js"></script>-->
 
@@ -42,47 +50,79 @@
 		}
 
 		#map {
-			position: absolute;
-			top: 0;
-			bottom: 0;
+			display: flex;
+			/* //top: 0; */
+			bottom: 0px;
 			width: 100%;
-      height: 100%;
+      height: 90%;
 		}
 		#showPoints {
-			background-color: #fffff2;
-			font-size: 11px;
-			position: absolute;
-			display: inline-flex;
-			padding: 5px;
-			margin: 15px;
 			right: 8px;
-			z-index: 800;
 		}
 		#tables {
+			right: 100px;
+
+		}
+		.buttons {
+			top: 0px;
 			background-color: #fffff2;
 			font-size: 11px;
 			position: absolute;
 			display: inline-flex;
 			padding: 5px;
 			margin: 15px;
-			right: 100px;
 			z-index: 800;
 		}
-
-		#enter {
-
-			border
+		#tablesCollapse {
+			z-index: 900;
 		}
-
 
 	</style>
 </head>
 
 <body>
 
-	<div id='map'></div>
-	<div id='showPoints'><button onClick='cameraTables()'>Camera Table</button></div>
-	<div id='tables'><input type=button onClick="toTables()" value='View Points'></div>
+
+
+	<nav id="navBar" class="navbar navbar-light" style="background-color: #e3e2fe">
+
+		<a class="navbar-brand h1" href="tables.html" style="text-align:right">
+		<object data="assets\1499683972.svg" width="30" height="30" class="d-inline-block align-top" alt="" ></object>
+		Security Cameras</br> of Boone, NC</a>
+		<!-- <div class='buttons' id='showPoints'><button onClick='cameraTables()'>Camera Table</button></div>
+		<div class='buttons' id='tables'><input type=button onClick="toTables()" value='View Points'></div>
+		<div class='buttons' id='directTables'><form action='/tables.html'><input type="submit"  value='Famous'></form></div> -->
+		<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#cameraCollapse" aria-expanded="false" aria-controls="cameraCollapse">Show points</button>
+		<a class="btn btn-primary" type="button" href="#">Save Edits</a>
+
+</nav>
+
+	<div class="tablesCollapse">
+	<div class="row">
+		<div class="col">
+			<div class="collapse multi-collpase" id="cameraCollapse">
+				<div class="card card-body">
+					<div class="row">
+						<div class="col-sm">
+							<b> Name </b>
+						</div>
+						<div class="col-sm">
+						<b>	Latitude, Longitude </b>
+
+						</div>
+						<div class="col-sm">
+						<b>	Description </b>
+						</div>
+					</div>
+					<div id='insertTheText'> </div>
+		</div>
+		</div>
+	</div>
+</div>
+</div>
+
+
+<div id='map'></div>
 
 
 
@@ -106,6 +146,7 @@ var circ_options = {
 };
 
 //creation of the Leaflet map
+	const dropTables = [];
 	const newPoints = [];
 	const pointsTable = [];
 	var map = L.map('map', options);
@@ -117,7 +158,7 @@ var Esri_WorldImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest
 
 
 const cameraIcon = L.divIcon({
-html: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path fill-opacity=".8" fill="#ff3300" border="4px solid #000000"  d="M0 128C0 92.7 28.7 64 64 64H320c35.3 0 64 28.7 64 64V384c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V128zM559.1 99.8c10.4 5.6 16.9 16.4 16.9 28.2V384c0 11.8-6.5 22.6-16.9 28.2s-23 5-32.9-1.6l-96-64L416 337.1V320 192 174.9l14.2-9.5 96-64c9.8-6.5 22.4-7.2 32.9-1.6z"/></svg>',
+html: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path fill-opacity=".8" fill="#fffff" border="4px solid #000000"  d="M0 128C0 92.7 28.7 64 64 64H320c35.3 0 64 28.7 64 64V384c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V128zM559.1 99.8c10.4 5.6 16.9 16.4 16.9 28.2V384c0 11.8-6.5 22.6-16.9 28.2s-23 5-32.9-1.6l-96-64L416 337.1V320 192 174.9l14.2-9.5 96-64c9.8-6.5 22.4-7.2 32.9-1.6z"/></svg>',
 iconSize: [20, 20] ,
 className: 'cameraIcon',
 });
@@ -150,27 +191,35 @@ className: 'cameraIcon',
 			let nameInput = document.getElementById('camName').value;
 			console.log(lat + lng);
 			if (nameInput !== ''){
-				let text = '|Name: ' + nameInput + '\t|Coordinates:\t' + lat +', ' +  lng + '|\n\n';
-				var table = '<tr><td>' + nameInput + '</td><td>' + lat + ',' + lng + '</td><td><submit></td></tr>';
-				newPoints.push(text);
-				pointsTable.push(table);
-				console.log('table', table);
-				console.log(text);
-				console.log(nameInput);
-				console.log('FIRST CONDITION');
+				var dropTable = '<div class="row"><div class="col-sm">' + nameInput + '</div>' + '<div class="col-sm">' + lat + ',' + lng + '</div><div class="col-sm"><i opacity=".8">Description</i></div></div>';
+				document.getElementById('insertTheText').innerHTML += dropTable;
+				console.log(dropTable);
+				// let text = '|Name: ' + nameInput + '\t|Coordinates:\t' + lat +', ' +  lng + '|\n\n';
+				// var table = '<tr><td>' + nameInput + '</td><td>' + lat + ',' + lng + '</td><td><submit></td></tr>';
+				// newPoints.push(text);
+				// pointsTable.push(table);
+				// console.log('table', table);
+				// console.log(text);
+				// console.log(nameInput);
+				// console.log('FIRST CONDITION');
 				map.closePopup();
 				map.setZoom(15);
 			} else if (nameInput === ""){
 				let nameInput = "Undefined";
 				let text = '|Name: Undefined \t|Coordinates:\t' + lat +', ' +  lng + '|\n\n';
 				var table = '<tr><td>Undefined</td><td>' + lat + ',' + lng + '</td><td><i opacity=".8">Description</i></td></tr>';
-				newPoints.push(text);
-				pointsTable.push(table);
-				console.log('table', table);
-				console.log(text);
-				console.log('SECOND CONDITION')
+				var dropTable = '<div class="row"><div class="col-sm"><i opacity=".8">Undefined</i></div>' + '<div class="col-sm">' + lat + ',' + lng + '</div><div class="col-sm"><i opacity=".8">Description</i></div></div>';
+				document.getElementById('insertTheText').innerHTML += dropTable;
+				console.log(dropTable);
+				// dropTables.push(dropTable);
+				// newPoints.push(text);
+				// pointsTable.push(table);
+				// console.log('table', table);
+				// console.log(text);
+				// console.log('SECOND CONDITION')
 				map.closePopup();
 				map.setZoom(15);
+
 			};
 
 };
@@ -220,65 +269,31 @@ function writeNewCircles(){
 function toTables(){
 
 	// window.open('test.html','__blank').document.write('<html><p>TEST</p></html>');
-	var tableInnerText = `<table>
+	var tableInnerText = `<div class='tableFull'><table>
 		<tr style="border:1px solid black">
 		<th>Camera Location</th>
 		<th>Lat / Lng</th>
 		<th>Description</th></tr>` + pointsTable + `</table>`
 	;
 
-	var tables = window.open('tables.html','__tables');// 'width=700,height=500 top=200,left=600');
-	tables.document.write('<style>table, th, tr, td{border: 1px solid black}</style>');
+	var tables = window.open('tables.html','tables');// 'width=700,height=500 top=200,left=600');
+	// tables.document.write('<style>.tablefull{border: 0.5px solid black; align-items: center; display: flex; flex-direction: column}');
+	// tables.document.write('th{border: 0.5px solid black} </style></div>')
 	tables.document.write(tableInnerText);
 
 
 };
 
 
+var townHallCam1 = L.marker([36.217891, -81.682866], {icon: cameraIcon}).addTo(map);
 
+var hopeCenterCam1 = L.marker([36.218263, -81.685100] , {icon: cameraIcon}).addTo(map);
 
-	//kinda 10132022 try to loop through the newPoints list of values
-	// and then transfer them into the table th tr td td td
+var libraryEagle = L.marker([36.215189, -81.679876], {icon: cameraIcon}).addTo(map);
 
-	//var newWindowBody = newWindow.document.createElement('p');
-	// var text = document.createTextNode(newPoints);
-	//newWindowBody.innerText = newPoints;
-//	console.log(text);
-//	newWindowBody.appendChild(text);
+townHallCam1.bindTooltip("<b>Cameras on Town Hall </b> </br> Three different cameras </br> aimed at the street, the sidewalk, </br> and the stop light on the awning of the Hall.").addTo(map);
 
-
-/*
-ALTERNATE_TOPOBASEMAP
-ESRI World Topographic
-var Esri_WorldTopoMap = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
-	attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), and the GIS User Community'
-});
-*/
-/*
-var USGS_USImageryTopo = L.tileLayer('https://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryTopo/MapServer/tile/{z}/{y}/{x}', {
-	maxZoom: 20,
-	attribution: 'Tiles courtesy of the <a href="https://usgs.gov/">U.S. Geological Survey</a>'
-}).addTo(map);
-*/
-
-
-
-//#0096FF is red
-//#ff3300 is blue
-
-
-//camera point features variables
-var townHallCam1 = L.circle([36.217891, -81.682866], circ_options).addTo(map);
-
-var hopeCenterCam1 = L.circle([36.218263, -81.685100] , circ_options).addTo(map);
-
-var libraryEagle = L.circle([36.215189, -81.679876], circ_options).addTo(map);
-
-// tooltips and information on each camera
-
-townHallCam1.bindTooltip("<b>Cameras on Town Hall </b> </br> There's like three different cameras </br> aimed at the street, the sidewalk, </br> and the stop light on the awning of the Hall.").addTo(map);
-
-hopeCenterCam1.bindTooltip('<b>The Hope Center</b> </br> This is the town "Pregnancy Services" clinic. </br> They monitor entry and exit from one </br> camera on the street mounted </br> on the door.').addTo(map);
+hopeCenterCam1.bindTooltip('<b>The Hope Center</b> </br> Entry/exit, one </br> camera on the street mounted </br> on the door.').addTo(map);
 
 libraryEagle.bindTooltip('<b> App State Library </b> </br> This camera resides above the coffee shop for the library. </br> Not sure which way it points... No access.').addTo(map);
 
@@ -292,3 +307,31 @@ libraryEagle.bindTooltip('<b> App State Library </b> </br> This camera resides a
 </body>
 
 </html>
+
+
+	<!-- //kinda 10132022 try to loop through the newPoints list of values
+	// and then transfer them into the table th tr td td td
+
+	//var newWindowBody = newWindow.document.createElement('p');
+	// var text = document.createTextNode(newPoints);
+	//newWindowBody.innerText = newPoints;
+//	console.log(text);
+//	newWindowBody.appendChild(text);
+
+
+
+
+
+//#0096FF is red
+//#ff3300 is blue
+
+
+//camera point features variables
+// var townHallCam1 = L.circle([36.217891, -81.682866], circ_options).addTo(map);
+//
+// var hopeCenterCam1 = L.circle([36.218263, -81.685100] , circ_options).addTo(map);
+//
+// var libraryEagle = L.circle([36.215189, -81.679876], circ_options).addTo(map);
+
+// tooltips and information on each camera
+// revise town hall description -->
